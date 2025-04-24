@@ -56,6 +56,8 @@ const pieces = [
     ]
 ];
 
+// Initialize game state
+let arena = createMatrix(12, 20);
 let player = {
     pos: {x: 0, y: 0},
     matrix: null,
@@ -66,7 +68,7 @@ let player = {
 let dropCounter = 0;
 let dropInterval = 1000;
 let lastTime = 0;
-let gameOver = false;
+let gameOver = true;  // Set initial state to gameOver
 
 function createMatrix(w, h) {
     const matrix = [];
@@ -195,8 +197,6 @@ function drawMatrix(matrix, offset) {
     });
 }
 
-let arena = createMatrix(12, 20);
-
 document.addEventListener('keydown', event => {
     if (gameOver) return;
     
@@ -217,14 +217,15 @@ document.addEventListener('keydown', event => {
 });
 
 startButton.addEventListener('click', () => {
-    if (gameOver) {
-        arena = createMatrix(12, 20);
-        player.score = 0;
-        player.level = 1;
-        gameOver = false;
-        updateScore();
-    }
+    arena = createMatrix(12, 20);
+    player.score = 0;
+    player.level = 1;
+    gameOver = false;
+    updateScore();
     playerReset();
+    lastTime = 0;
+    dropCounter = 0;
+    update();
 });
 
 function update(time = 0) {
